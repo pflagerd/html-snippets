@@ -1,0 +1,9 @@
+{
+  "name": "com.example.ls",
+  "description": "LS command host",
+  "path": "/path/to/your/ls_host.sh",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://YOUR_EXTENSION_ID_HERE/"
+  ]
+}

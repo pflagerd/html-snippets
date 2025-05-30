@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP PUT File Saver</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin: 10px 0;
+      padding: 8px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 10px;
+      padding: 10px;
+      min-height: 20px;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<h1>HTTP PUT File Saver</h1>
+<div class="input-group">
+  <label for="serverUrl">Server Endpoint:</label>
+  <input type="text" id="serverUrl" value="http://localhost:3000/files/" placeholder="http://yourserver.com/api/files/">
+</div>
+<div class="input-group">
+  <label for="filename">Filename:</label>
+  <input type="text" id="filename" value="example.txt">
+</div>
+<textarea id="content" placeholder="Enter file content here...">This is sample content that will be saved via HTTP PUT.</textarea>
+<div>
+  <button id="saveBtn">Save File via PUT</button>
+</div>
+<div id="status"></div>
+
+<script>
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const serverUrl = document.getElementById('serverUrl').value;
+    const filename = document.getElementById('filename').value;
+    const content = document.getElementById('content').value;
+    const statusEl = document.getElementById('status');
+
+    if (!serverUrl) {
+      statusEl.textContent = 'Please enter a server URL';
+      return;
+    }
+
+    if (!filename) {
+      statusEl.textContent = 'Please enter a filename';
+      return;
+    }
+
+    try {
+      statusEl.textContent = 'Saving file...';
+
+      const fullUrl = `${serverUrl}${encodeURIComponent(filename)}`;
+
+      const response = await fetch(fullUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        body: content
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status} ${response.statusText}`);
+      }
+
+      statusEl.textContent = `File saved successfully to: ${fullUrl}`;
+    } catch (error) {
+      statusEl.textContent = `Error: ${error.message}`;
+      console.error('PUT request failed:', error);
+    }
+  });
+</script>
+</body>
+</html>

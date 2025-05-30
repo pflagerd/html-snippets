@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local File Fetch Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      min-height: 100px;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+    input {
+      padding: 8px;
+      width: 80%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>Local File Fetcher</h1>
+<input type="text" id="filePath" placeholder="Enter local file path (e.g., data.json)" value="data.json">
+<div>
+  <button id="fetchBtn">Fetch File</button>
+  <button id="fetchTextBtn">Fetch as Text</button>
+  <button id="fetchJsonBtn">Fetch as JSON</button>
+</div>
+<div id="result">Response will appear here...</div>
+
+<script>
+  const resultDiv = document.getElementById('result');
+  const filePathInput = document.getElementById('filePath');
+
+  async function fetchFile(options = {}) {
+    const filePath = filePathInput.value;
+    if (!filePath) {
+      resultDiv.textContent = 'Please enter a file path';
+      return;
+    }
+
+    resultDiv.textContent = 'Fetching...';
+
+    try {
+      const response = await fetch(filePath, options);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response;
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}\n\n` +
+        'Make sure you:\n' +
+        '1. Have the correct file path\n' +
+        '2. Are running Chrome with --allow-file-access-from-files flag\n' +
+        '3. The file exists and is accessible';
+      throw error;
+    }
+  }
+
+  document.getElementById('fetchBtn').addEventListener('click', async () => {
+    await fetchFile();
+    resultDiv.textContent = 'File fetched successfully (check network tab for details)';
+  });
+
+  document.getElementById('fetchTextBtn').addEventListener('click', async () => {
+    try {
+      const response = await fetchFile();
+      const text = await response.text();
+      resultDiv.textContent = `File content:\n\n${text}`;
+    } catch (error) {
+      // Error already handled in fetchFile
+    }
+  });
+
+  document.getElementById('fetchJsonBtn').addEventListener('click', async () => {
+    try {
+      const response = await fetchFile();
+      const json = await response.json();
+      resultDiv.textContent = `JSON content:\n\n${JSON.stringify(json, null, 2)}`;
+    } catch (error) {
+      if (!error.message.includes('HTTP error')) {
+        resultDiv.textContent += '\n\n(Note: File might not be valid JSON)';
+      }
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Native Message LS Example",
+  "version": "1.0",
+  "description": "Calls /bin/ls via native messaging",
+  "permissions": ["nativeMessaging"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
