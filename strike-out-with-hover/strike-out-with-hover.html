@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strikethrough with Hover Tooltip</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Method 1: Using title attribute (simple) */
+        .strikethrough-simple {
+            text-decoration: line-through;
+            color: #888;
+            cursor: help;
+            margin-bottom: 30px;
+        }
+
+        /* Method 2: Custom CSS tooltip */
+        .strikethrough-custom {
+            text-decoration: line-through;
+            color: #888;
+            position: relative;
+            cursor: help;
+            margin-bottom: 30px;
+        }
+
+        .strikethrough-custom::after {
+            content: "This content has moved to a new location";
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+        }
+
+        .strikethrough-custom::before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #333;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+        }
+
+        .strikethrough-custom:hover::after,
+        .strikethrough-custom:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Method 3: Styled with animation */
+        .strikethrough-animated {
+            text-decoration: line-through;
+            color: #888;
+            position: relative;
+            cursor: help;
+            transition: color 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .strikethrough-animated:hover {
+            color: #666;
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateX(-50%) translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #667eea;
+        }
+
+        .strikethrough-animated:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .demo-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Strikethrough with Hover Tooltips</h1>
+        
+        <h2>Method 1: Simple Title Attribute</h2>
+        <span class="demo-label">Hover over the paragraph below:</span>
+        <p class="strikethrough-simple" title="This content has moved to a new location">
+            This paragraph content has been moved elsewhere. The simple approach uses the HTML title attribute for the tooltip.
+        </p>
+
+        <h2>Method 2: Custom CSS Tooltip</h2>
+        <span class="demo-label">Hover over the paragraph below:</span>
+        <p class="strikethrough-custom">
+            This paragraph shows a custom CSS tooltip with better styling and positioning control.
+        </p>
+
+        <h2>Method 3: Animated Tooltip</h2>
+        <span class="demo-label">Hover over the paragraph below:</span>
+        <p class="strikethrough-animated">
+            This paragraph features an animated tooltip with smooth transitions and gradient styling.
+            <span class="tooltip">This content has moved to a new location</span>
+        </p>
+
+        <h2>Usage Examples</h2>
+        <p>Choose the method that best fits your needs:</p>
+        <ul>
+            <li><strong>Method 1:</strong> Simplest implementation, browser default styling</li>
+            <li><strong>Method 2:</strong> Full control over tooltip appearance</li>
+            <li><strong>Method 3:</strong> Enhanced with animations and gradients</li>
+        </ul>
+    </div>
+</body>
+</html>
